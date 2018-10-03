@@ -90,6 +90,11 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
             // check for exception cases
             intPart = integerPart;
             fracPart = fractionPart;
+            
+            //Seeing if there are invalid mixed numbers
+            if((integerPart<0 && fractionPart.getSign() == '-') || (integerPart>1 && fractionPart.getSign() == '-')){
+                throw new Project1Exception("Please Input a valid mixed number");
+            }
             reduceToLowestForm(intPart, fracPart);
         }       // end setMixedNumber
 
@@ -105,6 +110,11 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
             intPart = integerPart;
             fracPart = new Fraction();
             fracPart.setFraction(fracPartNumerator, fracPartDenominator);
+            
+            //Seeing if there are invalid mixed numbers
+            if((integerPart<0 && fracPart.getSign() == '-') || (integerPart>1 && fracPart.getSign() == '-')){
+                throw new Project1Exception("Please Input a valid mixed number");
+            }
             reduceToLowestForm(intPart, fracPart);
         }       // end setMixedNumber
 
@@ -112,6 +122,7 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
 	{
                 // add statements
 	        // retrieve integer portion with correct (+ or -) sign 
+            
             return intPart;
             
         }	// end getInteger
@@ -130,8 +141,7 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
                 // Use Fraction's add() method to obtain Fraction result
                 // convert result to a new lowest term MixedNumber object
                 // hint: return new MixedNumber(0,result);
-            MixedNumberInterface selfMN = new MixedNumber(intPart,fracPart);
-            FractionInterface selfFI = getFractionalEquivalent(selfMN);
+            FractionInterface selfFI = getFractionalEquivalent(this);
             FractionInterface operandFI = getFractionalEquivalent(operand);
             selfFI = selfFI.add(operandFI);
             MixedNumberInterface result = new MixedNumber(0,selfFI);
@@ -146,8 +156,7 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
                 // Use Fraction's substrct() method to obtain Fraction result
                 // convert result to a new lowest term MixedNumber object
                 // hint: return new MixedNumber(0,result);
-            MixedNumberInterface selfMN = new MixedNumber(intPart,fracPart);
-            FractionInterface selfFI = getFractionalEquivalent(selfMN);
+            FractionInterface selfFI = getFractionalEquivalent(this);
             FractionInterface operandFI = getFractionalEquivalent(operand);
             selfFI = selfFI.subtract(operandFI);
             MixedNumberInterface result = new MixedNumber(0,selfFI);
@@ -161,8 +170,7 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
 		// Use Fraction's multiply() method to obtain Fraction result
 		// convert result to lowest term MixedNumber object
                 // hint: return new MixedNumber(0,result);
-            MixedNumberInterface selfMN = new MixedNumber(intPart,fracPart);
-            FractionInterface selfFI = getFractionalEquivalent(selfMN);
+            FractionInterface selfFI = getFractionalEquivalent(this);
             FractionInterface operandFI = getFractionalEquivalent(operand);
             selfFI = selfFI.multiply(operandFI);
             MixedNumberInterface result = new MixedNumber(0,selfFI);
@@ -176,8 +184,7 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
 		// Use Fraction's divide() method to obtain Fraction result
 		// convert result to lowest term MixedNumber object
                 // hint: return new MixedNumber(0,result);
-            MixedNumberInterface selfMN = new MixedNumber(intPart,fracPart);
-            FractionInterface selfFI = getFractionalEquivalent(selfMN);
+            FractionInterface selfFI = getFractionalEquivalent(this);
             FractionInterface operandFI = getFractionalEquivalent(operand);
             selfFI = selfFI.divide(operandFI);
             MixedNumberInterface result = new MixedNumber(0,selfFI);
@@ -191,7 +198,10 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
                 // possible solution:
                 // convert MixedNumber objects to Fraction objects
                 // Use Fraction's equals() method to obtain boolean result
-                return false; // change it
+            FractionInterface selfFI = getFractionalEquivalent(this);
+            MixedNumber operandMN = (MixedNumber) other;
+            FractionInterface operandFI = getFractionalEquivalent(operandMN);
+            return (selfFI.equals(operandFI)); // change it
 	  } // end if
 
 
@@ -201,7 +211,11 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
                 // possible solution:
                 // convert MixedNumber objects to Fraction objects
                 // Use Fraction's compareTo() method to obtain result
-                return 0; // change it
+            FractionInterface selfFI = getFractionalEquivalent(this);
+            FractionInterface operandFI = getFractionalEquivalent(other);
+            Fraction selfF = (Fraction) selfFI;
+            Fraction operandF = (Fraction) operandFI;
+            return (selfF.compareTo(operandF)); // change it
 	} // end compareTo
 
 	public String toString()
