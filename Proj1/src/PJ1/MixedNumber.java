@@ -235,7 +235,7 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
 	private void reduceToLowestForm(int integerPart, FractionInterface fractionPart)
 	{
                 // add statements
-            
+            //If the fraction is just a whole number
             if((fractionPart.getNumerator()%fractionPart.getDenominator()==0)){
                 int fracPartNum = 0;
                 int fracPartDenom = fractionPart.getDenominator();
@@ -244,6 +244,8 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
                 intPart = integerPart;
                 fracPart = fractionPart;
             }
+            
+            //If the fraction can be simplified and the int is negative
             else if ((fractionPart.getNumerator()/fractionPart.getDenominator()>=1 && integerPart<0)){
                 int fracPartNum = fractionPart.getNumerator()%fractionPart.getDenominator();
                 int fracPartDenom = fractionPart.getDenominator();
@@ -252,6 +254,8 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
                 intPart = integerPart;
                 fracPart = fractionPart;
             }
+            
+            //If the fraction can be simplified and the int is negative
             else if ((fractionPart.getNumerator()/fractionPart.getDenominator()>=1)){
                 int fracPartNum = fractionPart.getNumerator()%fractionPart.getDenominator();
                 int fracPartDenom = fractionPart.getDenominator();
@@ -260,11 +264,15 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
                 intPart = integerPart;
                 fracPart = fractionPart;
             }
+            
+            //If the fraction cannot be simplified
             else if (fractionPart.getNumerator()/fractionPart.getDenominator()==0 ){
                 intPart = integerPart;
                 fracPart = fractionPart;
             }
-            else if ((fractionPart.getNumerator()/fractionPart.getDenominator()<0)&&integerPart>=0){
+            
+            //If the fraction is negative
+            else if ((fractionPart.getNumerator()/fractionPart.getDenominator()<0)){
                 int fracPartNum = fractionPart.getNumerator()%fractionPart.getDenominator();
                 int fracPartDenom = fractionPart.getDenominator();
                 integerPart +=(fractionPart.getNumerator()/fractionPart.getDenominator());
@@ -281,6 +289,7 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
 	private FractionInterface getFractionalEquivalent(MixedNumberInterface mn)
 	{
                 // add statements
+            //If the int is negative
             if(mn.getIntegerPart()<0){
                 int num = (mn.getFractionPart().getNumerator()*-1) + (mn.getFractionPart().getDenominator() * mn.getIntegerPart());
                 int denom = mn.getFractionPart().getDenominator();
