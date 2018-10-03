@@ -112,15 +112,8 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
 	{
                 // add statements
 	        // retrieve integer portion with correct (+ or -) sign 
-            if (fracPart.getSign() == '-' && (intPart>1)){
-		return (intPart*(-1));
-            }
-            else if (fracPart.getSign() == '+' && (intPart<1)){//Will a positive Fraction have a + or will it be normal?
-                return (intPart*(-1));
-            }
-            else{
-                return intPart;
-            }
+            return intPart;
+            
         }	// end getInteger
 
 	public FractionInterface getFractionPart()
@@ -153,8 +146,12 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
                 // Use Fraction's substrct() method to obtain Fraction result
                 // convert result to a new lowest term MixedNumber object
                 // hint: return new MixedNumber(0,result);
-            
-            return selfMixedNumber; // change it
+            MixedNumberInterface selfMN = new MixedNumber(intPart,fracPart);
+            FractionInterface selfFI = getFractionalEquivalent(selfMN);
+            FractionInterface operandFI = getFractionalEquivalent(operand);
+            selfFI = selfFI.subtract(operandFI);
+            MixedNumberInterface result = new MixedNumber(0,selfFI);
+            return (result);// change it
 	}	// end subtract
 
 	public MixedNumberInterface multiplyMixedNumber(MixedNumberInterface operand)
@@ -164,8 +161,12 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
 		// Use Fraction's multiply() method to obtain Fraction result
 		// convert result to lowest term MixedNumber object
                 // hint: return new MixedNumber(0,result);
-            
-            return selfMixedNumber; // change it
+            MixedNumberInterface selfMN = new MixedNumber(intPart,fracPart);
+            FractionInterface selfFI = getFractionalEquivalent(selfMN);
+            FractionInterface operandFI = getFractionalEquivalent(operand);
+            selfFI = selfFI.multiply(operandFI);
+            MixedNumberInterface result = new MixedNumber(0,selfFI);
+            return (result); // change it
 	}	// end multiply
 
 	public MixedNumberInterface divideMixedNumber(MixedNumberInterface operand)
@@ -175,8 +176,12 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
 		// Use Fraction's divide() method to obtain Fraction result
 		// convert result to lowest term MixedNumber object
                 // hint: return new MixedNumber(0,result);
-            
-            return selfMixedNumber; // change it
+            MixedNumberInterface selfMN = new MixedNumber(intPart,fracPart);
+            FractionInterface selfFI = getFractionalEquivalent(selfMN);
+            FractionInterface operandFI = getFractionalEquivalent(operand);
+            selfFI = selfFI.divide(operandFI);
+            MixedNumberInterface result = new MixedNumber(0,selfFI);
+            return (result); // change it
 	}	// end divide
 
 
@@ -205,7 +210,7 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
                 // together with sign, integer and Fraction's toString() method
                 // to obtain string value
                 // add statements
-                return(intPart+" "+fracPart); // change it
+                return(" "+intPart+" "+fracPart); // change it
 	} // end toString
 
 	
@@ -216,13 +221,34 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
 	private void reduceToLowestForm(int integerPart, FractionInterface fractionPart)
 	{
                 // add statements
-            if ((fracPart.getNumerator()/fracPart.getDenominator()>1)){
-                int fracPartNum = fracPart.getNumerator()%fracPart.getDenominator();
-                int fracPartDenom = fracPart.getDenominator();
-                fracPart.setFraction(fracPartNum, fracPartDenom);
-                intPart = intPart+(fracPart.getNumerator()/fracPart.getDenominator());
+            
+            if((fractionPart.getNumerator()%fractionPart.getDenominator()==0)){
+                int fracPartNum = 0;
+                int fracPartDenom = fractionPart.getDenominator();
+                integerPart +=(fractionPart.getNumerator()/fractionPart.getDenominator());
+                fractionPart.setFraction(fracPartNum, fracPartDenom);
+                intPart = integerPart;
+                fracPart = fractionPart;
             }
-            else{
+            
+            else if ((fractionPart.getNumerator()/fractionPart.getDenominator()>=1)){
+                int fracPartNum = fractionPart.getNumerator()%fractionPart.getDenominator();
+                int fracPartDenom = fractionPart.getDenominator();
+                integerPart +=(fractionPart.getNumerator()/fractionPart.getDenominator());
+                fractionPart.setFraction(fracPartNum, fracPartDenom);
+                intPart = integerPart;
+                fracPart = fractionPart;
+            }
+            else if (fractionPart.getNumerator()/fractionPart.getDenominator()==0 ){
+                intPart = integerPart;
+                fracPart = fractionPart;
+            }
+            else if ((fractionPart.getNumerator()/fractionPart.getDenominator()<0)&&integerPart>=0){
+                int fracPartNum = fractionPart.getNumerator()%fractionPart.getDenominator();
+                int fracPartDenom = fractionPart.getDenominator();
+                integerPart +=(fractionPart.getNumerator()/fractionPart.getDenominator());
+                fractionPart.setFraction(fracPartNum, fracPartDenom);
+                fractionPart.setSign('+');
                 intPart = integerPart;
                 fracPart = fractionPart;
             }
@@ -234,11 +260,20 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
 	private FractionInterface getFractionalEquivalent(MixedNumberInterface mn)
 	{
                 // add statements
-            int num = mn.getFractionPart().getNumerator()+ (mn.getFractionPart().getDenominator() * mn.getIntegerPart());
-            int denom = mn.getFractionPart().getDenominator();
-            FractionInterface fracEquivalent = new Fraction();
-            fracEquivalent.setFraction(num,denom);
-            return fracEquivalent;
+            if(mn.getIntegerPart()<0){
+                int num = (mn.getFractionPart().getNumerator()*-1) + (mn.getFractionPart().getDenominator() * mn.getIntegerPart());
+                int denom = mn.getFractionPart().getDenominator();
+                FractionInterface fracEquivalent = new Fraction();
+                fracEquivalent.setFraction(num,denom);
+                return fracEquivalent;
+            }
+            else{
+                int num = mn.getFractionPart().getNumerator()+ (mn.getFractionPart().getDenominator() * mn.getIntegerPart());
+                int denom = mn.getFractionPart().getDenominator();
+                FractionInterface fracEquivalent = new Fraction();
+                fracEquivalent.setFraction(num,denom);
+                return fracEquivalent;
+            }
 	}	// end getFractionalEquivalent
 
 } // end MixedNumber
