@@ -230,7 +230,14 @@ public class MixedNumber implements MixedNumberInterface, Comparable<MixedNumber
                 intPart = integerPart;
                 fracPart = fractionPart;
             }
-            
+            else if ((fractionPart.getNumerator()/fractionPart.getDenominator()>=1 && integerPart<0)){
+                int fracPartNum = fractionPart.getNumerator()%fractionPart.getDenominator();
+                int fracPartDenom = fractionPart.getDenominator();
+                integerPart -=(fractionPart.getNumerator()/fractionPart.getDenominator());
+                fractionPart.setFraction(fracPartNum, fracPartDenom);
+                intPart = integerPart;
+                fracPart = fractionPart;
+            }
             else if ((fractionPart.getNumerator()/fractionPart.getDenominator()>=1)){
                 int fracPartNum = fractionPart.getNumerator()%fractionPart.getDenominator();
                 int fracPartDenom = fractionPart.getDenominator();
