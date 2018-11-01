@@ -21,40 +21,54 @@ public class MyLinkedStack<T> implements MyStackInterface<T>
    public MyLinkedStack()
    {
       // add stataments
+       top = null;
+       count = 0;
    } // end default constructor
   
    public void push(T newData)
    {
       // add stataments
+       StackNode newNode = new StackNode(newData,top);
+       top = newNode;
+       count++;
    } // end push
 
    public T peek()
    {
       // add stataments
-      return null;
+       T topNode = null;
+       if(top!=null)
+           topNode = top.data;
+      return topNode;
    } // end peek
 
    public T pop()
    {
       // add stataments
-      return null;
+       T topNode = peek();
+       if(top!=null)
+           top = top.next;
+           count--;
+      return topNode;
    } // end pop
 
    public int size()
    {
       // add stataments
-      return 0;
+      return count;
    } // end size 
 
    public boolean empty() 
    {
       // add stataments
-      return false;
+      return top == null;
    } // end empty
       	   
    public void clear()
    {
       // add stataments
+       top = null;
+       count = 0;
    } // end clear
 
    public String toString()
@@ -62,7 +76,15 @@ public class MyLinkedStack<T> implements MyStackInterface<T>
       // add stataments
       // note: data class in stack must implement toString() method
       //       return a list of data in Stack, separate them with ','
-      return null;
+       String result = "[";
+       StackNode current = top;
+       while(current!=null)
+       {
+           result += current.data + ",";
+           current = current.next;
+       }
+       result = result + "]";
+      return result;
    }
 
 
