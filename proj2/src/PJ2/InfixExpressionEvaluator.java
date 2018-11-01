@@ -107,7 +107,59 @@ public class InfixExpressionEvaluator
 
 
       // add statements here
-      return null;
+       int characterCount = infix.length();
+       StringBuffer PE = new StringBuffer();
+       MyStackInterface<Character> S = new MyLinkedStack();
+       for(int index = 0;index<characterCount;index++)
+       {
+           char ch = infix.charAt(index);
+           switch(ch)
+            {
+		case '(': 
+                    S.push(ch); 
+                    break;
+                    
+		case ')':// loop until “(“
+		{
+                    while(ch!='(')
+                    {
+                        char symbol = S.pop(); 
+                        if (symbol != '(' )
+                        { 
+                            PE.append(symbol);
+                            
+                        }
+                        else
+                            break;
+                    }
+                    break;
+		}
+                
+		case '+':case'-':case'*':case'/': //get TopSymbol from S if S is not empty
+                {
+                    while ((S.size()!= 0) && (S.peek() != '(') && (ch <= S.peek())) 
+			{
+                            char symbol = S.pop(); 
+                            PE.append(symbol);
+			}
+                    S.push(ch);
+                    break;
+                }
+                default:
+                {
+                    PE.append(ch);
+                    break;
+                }
+            } // end switch
+           
+       }
+       while(S.empty() == false)
+       {
+          
+	  char symbol = S.pop(); 
+	  PE.append(symbol);
+       }
+       return PE.toString();
    } // end convertToPostfix
 
 
