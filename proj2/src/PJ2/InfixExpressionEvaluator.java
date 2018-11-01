@@ -121,17 +121,13 @@ public class InfixExpressionEvaluator
                     
 		case ')':// loop until “(“
 		{
-                    while(ch!='(')
-                    {
+                    
                         char symbol = S.pop(); 
                         if (symbol != '(' )
                         { 
                             PE.append(symbol);
                             
                         }
-                        else
-                            break;
-                    }
                     break;
 		}
                 
@@ -157,7 +153,10 @@ public class InfixExpressionEvaluator
        {
           
 	  char symbol = S.pop(); 
-	  PE.append(symbol);
+          if(symbol!='(')
+          {
+              PE.append(symbol);
+          }
        }
        return PE.toString();
    } // end convertToPostfix
