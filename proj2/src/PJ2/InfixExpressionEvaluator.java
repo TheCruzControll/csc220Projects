@@ -226,7 +226,47 @@ public class InfixExpressionEvaluator
 	*/
 
       // add statements here
-      return 0.0;
+       int characterCount = postfix.length();
+       MyStackInterface<Double> S = new MyLinkedStack();
+       for(int index = 0;index<characterCount;index++)
+       {
+           char ch = postfix.charAt(index);
+           switch(ch)
+           {    
+               default:
+                {
+                    
+                    S.push(getVariableValue(ch));
+                    break;
+                }
+               case'+':
+               {
+                   double op1 = S.pop();
+                   double op2 = S.pop();
+                   double result = op1+op2;
+               }
+               case'-':
+               {
+                   double op1 = S.pop();
+                   double op2 = S.pop();
+                   double result = op1-op2;
+               }
+               case'*':
+               {
+                   double op1 = S.pop();
+                   double op2 = S.pop();
+                   double result = op1*op2;
+               }
+               case'/':
+               {
+                   double op1 = S.pop();
+                   double op2 = S.pop();
+                   double result = op1/op2;
+               }
+           }
+                   
+       }
+       return 0.0;
    } // end evaluatePostfix
 
 
