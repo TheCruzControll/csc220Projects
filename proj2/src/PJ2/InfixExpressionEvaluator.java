@@ -35,7 +35,22 @@ public class InfixExpressionEvaluator
 
        @param infix :  A valid infix expression.
        @return Equivalent postfix expression */
-
+    
+    private int precedenceLevel(char op)
+        {
+            switch (op) 
+            {
+                case '+':
+                case '-':
+                    return 0;
+                case '*':
+                case '/':
+                    return 1;
+                default:
+                    throw new IllegalArgumentException("Operator unknown: " + op);
+            }
+        }
+    
    private String convertToPostfix(String infix)
    {
 
@@ -107,6 +122,7 @@ public class InfixExpressionEvaluator
 
 
       // add statements here
+        
        int characterCount = infix.length();
        StringBuffer PE = new StringBuffer();
        MyStackInterface<Character> S = new MyLinkedStack();
@@ -115,48 +131,48 @@ public class InfixExpressionEvaluator
            char ch = infix.charAt(index);
            switch(ch)
             {
+                default:
+                {
+                    PE.append(ch);
+                    break;
+                }
+                
 		case '(': 
                     S.push(ch); 
                     break;
                     
 		case ')':// loop until “(“
 		{
-                    
-                        char symbol = S.pop(); 
-                        if (symbol != '(' )
-                        { 
-                            PE.append(symbol);
-                            
-                        }
-                    break;
+                    while((!S.empty() ) && (S.peek() != '(') ) 
+                    {
+			char symbol = S.pop(); 
+                        PE.append(symbol);
+                    }
+                    S.pop();
+                    break;   
+                        
 		}
                 
 		case '+':case'-':case'*':case'/': //get TopSymbol from S if S is not empty
                 {
-                    while ((S.size()!= 0) && (S.peek() != '(') && (ch <= S.peek())) 
-			{
-                            char symbol = S.pop(); 
-                            PE.append(symbol);
-			}
+                    
+                    while((!S.empty()) && (S.peek() != '(') && (precedenceLevel(ch) <= precedenceLevel(S.peek()))) 
+                    {
+			char symbol = S.pop(); 
+                        PE.append(symbol);
+                    }
                     S.push(ch);
                     break;
                 }
-                default:
-                {
-                    PE.append(ch);
-                    break;
-                }
+                
+        
             } // end switch
            
        }
-       while(S.empty() == false)
+       while(!S.empty())
        {
-          
 	  char symbol = S.pop(); 
-          if(symbol!='(')
-          {
-              PE.append(symbol);
-          }
+          PE.append(symbol);
        }
        return PE.toString();
    } // end convertToPostfix
