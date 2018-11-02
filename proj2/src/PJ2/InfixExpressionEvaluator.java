@@ -231,42 +231,47 @@ public class InfixExpressionEvaluator
        for(int index = 0;index<characterCount;index++)
        {
            char ch = postfix.charAt(index);
-           switch(ch)
+           if(checkValidVariable(ch) ==true)
+           {
+               S.push(getVariableValue(ch));
+           }
+           else if(checkValidOperator(ch)==true)
            {    
-               default:
-                {
-                    
-                    S.push(getVariableValue(ch));
-                    break;
-                }
-               case'+':
+               
+               switch(ch)
                {
-                   double op1 = S.pop();
-                   double op2 = S.pop();
-                   double result = op1+op2;
-               }
-               case'-':
-               {
-                   double op1 = S.pop();
-                   double op2 = S.pop();
-                   double result = op1-op2;
-               }
-               case'*':
-               {
-                   double op1 = S.pop();
-                   double op2 = S.pop();
-                   double result = op1*op2;
-               }
-               case'/':
-               {
-                   double op1 = S.pop();
-                   double op2 = S.pop();
-                   double result = op1/op2;
+                    case'+':
+                    {
+                        double op1 = S.pop();
+                        double op2 = S.pop();
+                        S.push(op2+op1);
+                        break;
+                    }
+                    case'-':
+                    {
+                        double op1 = S.pop();
+                        double op2 = S.pop();
+                        S.push(op2-op1);
+                        break;
+                    }
+                    case'*':
+                    {
+                        double op1 = S.pop();
+                        double op2 = S.pop();
+                        S.push(op2*op1);
+                        break;
+                    }
+                    case'/':
+                    {
+                        double op1 = S.pop();
+                        double op2 = S.pop();
+                        S.push(op2/op1);
+                        break;
+                    }
                }
            }
-                   
        }
-       return 0.0;
+       return S.pop();
    } // end evaluatePostfix
 
 
