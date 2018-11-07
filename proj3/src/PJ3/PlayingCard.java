@@ -106,6 +106,24 @@ class OneDeck {
     public OneDeck()
     {
         // implement this method!
+        ArrayList<Card> tempDeck = new ArrayList<Card>();
+        for(int suitNum=1;suitNum<=4;suitNum++)
+        {
+            for(int rankNum=1;rankNum<=13;rankNum++)
+            {
+                try 
+                {
+                    Card newCard = new Card(rankNum,suitNum);
+                    tempDeck.add(newCard);
+                }
+                catch (PlayingCardException e)
+                {
+                    System.out.println("PlayingCardException: "+e.getMessage());
+                }
+            }
+        }
+        playDeck = tempDeck;
+        saveDeck = playDeck;
     }
 
 
@@ -116,6 +134,7 @@ class OneDeck {
     public void shuffle()
     {
         // implement this method!
+        Collections.shuffle(playDeck);
     }
 
     /**
@@ -132,7 +151,20 @@ class OneDeck {
     public List<Card> deal(int numberCards) throws PlayingCardException
     {
         // implement this method!
-        return null;
+        ArrayList<Card> cardsDealt = new ArrayList<Card>();
+        try
+        {
+            for(int numberCards;numberCards>0;numberCards--)
+            {
+                Card newCard = playDeck.remove(0);
+                cardsDealt.add(newCard);
+            }
+        }
+        catch (PlayingCardException e)
+        {
+            System.out.println("PlayingCardException: "+e.getMessage());
+        }
+        return cardsDealt;
     }
 
     /**
