@@ -122,8 +122,10 @@ class OneDeck {
                 }
             }
         }
-        playDeck = tempDeck;
-        saveDeck = playDeck;
+        
+        saveDeck = tempDeck;
+        playDeck = new ArrayList<Card>(tempDeck);
+        
     }
 
 
@@ -135,6 +137,7 @@ class OneDeck {
     {
         // implement this method!
         Collections.shuffle(playDeck);
+        
     }
 
     /**
@@ -151,18 +154,15 @@ class OneDeck {
     public List<Card> deal(int numberCards) throws PlayingCardException
     {
         // implement this method!
-        ArrayList<Card> cardsDealt = new ArrayList<Card>();
-        try
+        ArrayList<Card> cardsDealt = new ArrayList();
+        if(numberCards>remainSize())
         {
-            for(int numberCards;numberCards>0;numberCards--)
-            {
-                Card newCard = playDeck.remove(0);
-                cardsDealt.add(newCard);
-            }
+            throw new PlayingCardException("Not enough cards to deal");
         }
-        catch (PlayingCardException e)
+        for(int i = 0;i<numberCards;i++)
         {
-            System.out.println("PlayingCardException: "+e.getMessage());
+            Card newCard = playDeck.remove(playDeck.size()-1);
+            cardsDealt.add(0,newCard);
         }
         return cardsDealt;
     }
@@ -173,6 +173,7 @@ class OneDeck {
     public void reset()
     {
         // implement this method!
+        playDeck=saveDeck;
     }
 
     /**
