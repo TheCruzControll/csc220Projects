@@ -205,13 +205,21 @@ public class VideoPoker {
     {
         boolean fourOfAKind = true;
         List<Integer> sortedCardRanks = new ArrayList<>();
-        playerHand.forEach((card) -> {
+        for(Card card : playerHand)
+        {
             sortedCardRanks.add(card.getRank());
-        });
+        }
         
         Collections.sort(sortedCardRanks);
-        int counter = 0;
+        
+        /*If the hand has a four of a kind then the common rank
+          must be in the middle of the hand*/
         int commonValue = sortedCardRanks.get(2);
+        
+        /*
+          Counts how many times the common rank shows up in the hand.
+        */
+        int counter = 0;
         
         for(int i = 0;i<4;i++)
         {
@@ -221,6 +229,8 @@ public class VideoPoker {
             }
         }
         
+        /*If there isnt 4 instances of the common rank. 
+          Then it is not a four of a kind*/
         if(counter!=4)
             fourOfAKind = false;
         return fourOfAKind;
@@ -234,11 +244,21 @@ public class VideoPoker {
         {
             sortedCardRanks.add(card.getRank());
         }
+        
         Collections.sort(sortedCardRanks);
+        
+        //Splits Hand Into 2 Common Values since a Full house only has 2 values
+        /*The only index that should differ in a full house is the middle index
+          so i chose index to the left and to the right because those values will
+          not change. 
+        */
         int commonValue = sortedCardRanks.get(1);
         int commonValue2 = sortedCardRanks.get(3);
+        
+        //Counters for both of the values
         int counter = 0;
         int counter2 = 0;
+        
         for(int i = 0;i<5;i++)
         {
             if(sortedCardRanks.get(i) == commonValue)
@@ -250,6 +270,7 @@ public class VideoPoker {
                 counter2++;
             }
         }
+        
         if((counter == 3 && counter2==2) || (counter == 2 && counter2==3))
         {
             return true;
@@ -281,8 +302,10 @@ public class VideoPoker {
             sortedCardRanks.add(card.getRank());
         }
         
+        //sort cards so you can see if theyre consecutive
         Collections.sort(sortedCardRanks);
         
+        //Test to see if there is a different suit
         for(Card card : playerHand){
     		if(card.getSuit() != firstCardSuit)
                 {
@@ -291,6 +314,7 @@ public class VideoPoker {
                 }
     	}
         
+        //Test to see if theyre all consecutive
         for(int i = 0; i < 4; i++){
     		if(!(sortedCardRanks.get(i) == (sortedCardRanks.get(i+1) - 1)))
     			return false;
@@ -309,8 +333,11 @@ public class VideoPoker {
         }
         
         Collections.sort(sortedCardRanks);
-        int counter = 0;
+        
+        /*If the hand has a three of a kind then the common rank
+          must be in the middle of the hand*/
         int commonValue = sortedCardRanks.get(2);
+        int counter = 0;
         
         for(int i = 0;i<4;i++)
         {
@@ -320,6 +347,8 @@ public class VideoPoker {
             }
         }
         
+        /*If there isnt 4 instances of the common rank. 
+          Then it is not a four of a kind*/
         if(!(counter==3))
             return false;
         return true;
@@ -338,6 +367,7 @@ public class VideoPoker {
         Collections.sort(sortedCardRanks);
         int counter = 0;
         
+        //Since it is sorted. There is a pair if there are 2 equal values next to eachother
         for(int i = 0;i<4;i++)
         {
             if(sortedCardRanks.get(i) == sortedCardRanks.get(i+1))
@@ -346,6 +376,7 @@ public class VideoPoker {
             }
         }
         
+        //It is a twoPair if and only if the counter is 2
         if(counter==2)
             twoPair = true;
         
@@ -374,6 +405,9 @@ public class VideoPoker {
             }
         }
         
+        /*There can only be 2 pairs max in a hand. 
+          This is if there is only 1 pair
+        */
         if (counter != 0 && counter != 2)
         {
             royalPair = true;
@@ -381,6 +415,7 @@ public class VideoPoker {
         
         return royalPair;
     }
+    /*
     private boolean isPair()
     {
         boolean royalPair = false;
@@ -395,7 +430,7 @@ public class VideoPoker {
         
         for(int i = 0;i<sortedCardRanks.size();i++)
         {
-            //If card(i) is the same as card(i+1) and is a royal card or ace
+            //If card(i) is the same as card(i+1)
             if(sortedCardRanks.get(i) == sortedCardRanks.get(i+1))
             {
                 counter++;
@@ -408,7 +443,8 @@ public class VideoPoker {
         }
         
         return royalPair;
-    }
+    }*/
+    
     private void showBalance(){
     	System.out.println("Balance: $" + playerBalance);
     }
@@ -422,14 +458,16 @@ public class VideoPoker {
             playerBet = scanner.nextInt();
 
             if(playerBet > playerBalance)
-                {
-                    System.out.println("Bet is larger than balance, try again");
-                    getBet();
-    		}
+            {
+                System.out.println("Bet is larger than balance, try again");
+                //If its invalid loop it again
+                getBet();
+            }
     	}
     	catch(InputMismatchException e){
-    		System.out.println("Invalid entry. Try again");
-    		getBet();
+            System.out.println("Invalid entry. Try again");
+            //If its invalid loop it again
+            getBet();
     	}
     }
     
@@ -455,23 +493,31 @@ public class VideoPoker {
         System.out.print("Enter positions of cards to keep (e.g. 1 4 5 ): ");
         scanner = new Scanner(System.in);
         String positionsInput = scanner.nextLine();
+        
+        //Split input by spaces and put them into an array
         String[] positions = positionsInput.split(" ");
+        
+        //If they didnt enter anything then just exit out
         if(positionsInput.isEmpty()){
     		return;
     	}
+        
         try
         {
             for(int i=0;i<positions.length;i++)
             {
-                //position 1 is index 0 so we have to change
+                //position 1 for the user is index 0 so we have to change the number
                 int position = Integer.parseInt(positions[i]) - 1;
+                
+                //Change the card of the position given
                 playerHand.set(position, thisDeck.deal(1).get(0));
             }
             System.out.println(playerHand.toString());
         }
         catch(Exception e){
-    		System.out.println("Please input integers 1-5 only. Try again");
-    		changeCards();
+            System.out.println("Please input integers 1-5 only. Try again");
+            //If invalid loop again
+            changeCards();
     	}
         
         
@@ -487,19 +533,25 @@ public class VideoPoker {
         System.out.println("\nWant to see payout table (y or n)");
     	String input = scanner.nextLine();
         
-
     	if(input.equals("n"))
         {
-    		showPayoutTable = false;
-                System.out.println("-----------------------------------");
+            showPayoutTable = false;
+            System.out.println("-----------------------------------");
     	}
         else if(input.equals("y"))
             showPayoutTable = true;
         
         else if(input.isEmpty()){
-    		userPlayoutTable();
+            //If invalid loop again
+            userPlayoutTable();
     	}
+        else
+        {
+            System.out.println("Invalid entry. Try again");
+            userPlayoutTable();
+        }
     }
+    
     private void newGame()
     {
         System.out.println("Play again? (y or n)");
@@ -509,15 +561,19 @@ public class VideoPoker {
         {
             userPlayoutTable();
             play();
-                    
         }
         else if(input.equals("n"))
         {
             exitGame();
         }
-        else
+        else if(input.isEmpty())
         {
             newGame();
+        }
+        else
+        {
+            System.out.println("Invalid entry. Try again");
+            userPlayoutTable();
     	}
     }
     
@@ -551,14 +607,34 @@ public class VideoPoker {
         if(showPayoutTable){
     		showPayoutTable();
     	}
+        //Show Balance
         showBalance();
+        
+        //Get Bet
         getBet();
+        
+        //Verify bet value and update balance
         updateBalance();
+        
+        //Reset deck
         thisDeck.reset();
+        
+        //Shuffle Deck
         thisDeck.shuffle();
+        
+        //Deal and Display Cards
         dealCards();
+        
+        /*ask for positions of cards to keep  
+         *get positions in one input line
+         *update cards
+         */
         changeCards();
+        
+        //Check Hands
         checkHands();
+        
+        //Show balance
         showBalance();
         if(playerBalance == 0){
     		exitGame();
