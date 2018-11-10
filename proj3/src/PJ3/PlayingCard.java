@@ -106,7 +106,7 @@ class OneDeck {
     public OneDeck()
     {
         // implement this method!
-        ArrayList<Card> tempDeck = new ArrayList<Card>();
+        ArrayList<Card> tempDeck = new ArrayList<>();
         for(int suitNum=1;suitNum<=4;suitNum++)
         {
             for(int rankNum=1;rankNum<=13;rankNum++)
@@ -124,6 +124,9 @@ class OneDeck {
         }
         
         saveDeck = tempDeck;
+        
+        //constructs new list with the elements of tempdeck. 
+        //makes a copy and assigns play deck to it
         playDeck = new ArrayList<Card>(tempDeck);
         
     }
@@ -137,7 +140,6 @@ class OneDeck {
     {
         // implement this method!
         Collections.shuffle(playDeck);
-        
     }
 
     /**
@@ -154,7 +156,7 @@ class OneDeck {
     public List<Card> deal(int numberCards) throws PlayingCardException
     {
         // implement this method!
-        ArrayList<Card> cardsDealt = new ArrayList();
+        List<Card> cardsDealt = new ArrayList();
         if(numberCards>remainSize())
         {
             throw new PlayingCardException("Not enough cards to deal");

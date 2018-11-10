@@ -44,7 +44,10 @@ import java.util.*;
 
 
 public class VideoPoker {
-
+    
+    // Scanner for user input methods
+    private Scanner scanner;
+    
     // default constant values
     private static final int defaultBalance=100;
     private static final int numberCards=5;
@@ -89,7 +92,10 @@ public class VideoPoker {
 	}
 	System.out.println("\n\n");
     }
-
+    
+    // check if user wants to see payout table
+    boolean showPayoutTable = true;
+    
     /** Check current playerHand using winningMultipliers and winningHands arrays
      *  Must print yourHandType (default is "Sorry, you lost") at the end of function.
      *  This can be checked by testCheckHands() and main() method.
@@ -97,39 +103,48 @@ public class VideoPoker {
     private void checkHands()
     {
 	// implement this method
-        if(isRoyalFlush()){
+        if(isRoyalFlush())
+        {
     		System.out.println("Royal Flush!");
     		playerBalance += winningMultipliers[8] * playerBet;
     	}
-    	else if(isStraightFlush()){
+    	else if(isStraightFlush())
+        {
     		System.out.println("Straight Flush!");
     		playerBalance += winningMultipliers[7] * playerBet;	
     	}
-        else if(isStraight()){
+        else if(isStraight())
+        {
     		System.out.println("Straight!");
     		playerBalance += winningMultipliers[3] * playerBet;	
     	}
-        else if(isFlush()){
+        else if(isFlush())
+        {
     		System.out.println("Flush!");
     		playerBalance += winningMultipliers[4] * playerBet;	
     	}
-        else if(isFullHouse()){
+        else if(isFullHouse())
+        {
     		System.out.println("Full House!");
     		playerBalance += winningMultipliers[5] * playerBet;	
     	}
-        else if(isFourOfAKind()){
+        else if(isFourOfAKind())
+        {
     		System.out.println("Four of a kind!");
     		playerBalance += winningMultipliers[6] * playerBet;	
     	}
-        else if(isThreeOfAKind()){
+        else if(isThreeOfAKind())
+        {
     		System.out.println("Three of a kind!");
     		playerBalance += winningMultipliers[2] * playerBet;	
     	}
-        else if(isTwoPair()){
+        else if(isTwoPair())
+        {
     		System.out.println("Two Pair!");
     		playerBalance += winningMultipliers[1] * playerBet;	
     	}
-        else if(isRoyalPair()){
+        else if(isRoyalPair())
+        {
     		System.out.println("Royal Pair!");
     		playerBalance += winningMultipliers[0] * playerBet;	
     	}
@@ -149,6 +164,7 @@ public class VideoPoker {
         int firstCardSuit = playerHand.get(0).getSuit();
     	List<Integer> royalFlushRankList = Arrays.asList(1,10,11,12,13);
         
+        //if it doesnt meet any of the requirements then it is not a royal flush
         for(Card card : playerHand)
         {
             if((card.getSuit() != firstCardSuit || !royalFlushRankList.contains(card.getRank())))
@@ -168,16 +184,18 @@ public class VideoPoker {
             sortedCardRanks.add(card.getRank());
         }
         
+        //sort cards
         Collections.sort(sortedCardRanks);
         
+        //if theyre not all the same suit then it is false
         for(Card card : playerHand){
     		if(card.getSuit() != firstCardSuit)
-    			return false;
+    			straightFlush = false;
     	}
 
         for(int i = 0; i < 4; i++){
     		if(!(sortedCardRanks.get(i) == (sortedCardRanks.get(i+1) - 1)))
-    			return false;
+    			straightFlush = false;
     	}
 
         return straightFlush;
@@ -185,12 +203,11 @@ public class VideoPoker {
     
     private boolean isFourOfAKind() //four cards of the same number
     {
-        boolean fourOfAKind = false;
+        boolean fourOfAKind = true;
         List<Integer> sortedCardRanks = new ArrayList<>();
-        for(Card card : playerHand)
-        {
+        playerHand.forEach((card) -> {
             sortedCardRanks.add(card.getRank());
-        }
+        });
         
         Collections.sort(sortedCardRanks);
         int counter = 0;
@@ -204,8 +221,8 @@ public class VideoPoker {
             }
         }
         
-        if(counter==4)
-            fourOfAKind = true;
+        if(counter!=4)
+            fourOfAKind = false;
         return fourOfAKind;
     }
     
@@ -392,6 +409,117 @@ public class VideoPoker {
         
         return royalPair;
     }
+    private void showBalance(){
+    	System.out.println("Balance: $" + playerBalance);
+    }
+    
+    private void getBet()
+    {
+        System.out.print("Enter bet: ");
+        try
+        {
+            scanner = new Scanner(System.in);
+            playerBet = scanner.nextInt();
+
+            if(playerBet > playerBalance)
+                {
+                    System.out.println("Bet is larger than balance, try again");
+                    getBet();
+    		}
+    	}
+    	catch(InputMismatchException e){
+    		System.out.println("Invalid entry. Try again");
+    		getBet();
+    	}
+    }
+    
+    private void updateBalance()
+    {
+        playerBalance -= playerBet;
+    }
+    private void dealCards()
+    {
+        try
+        {
+            playerHand = thisDeck.deal(numberCards);
+            System.out.println(playerHand.toString());
+        }
+        catch(PlayingCardException e)
+        {
+            System.out.println("PlayingCardException:" + e.getMessage());
+        }
+    }
+    
+    private void changeCards()
+    {
+        System.out.print("Enter positions of cards to keep (e.g. 1 4 5 ): ");
+        scanner = new Scanner(System.in);
+        String positionsInput = scanner.nextLine();
+        String[] positions = positionsInput.split(" ");
+        if(positionsInput.isEmpty()){
+    		return;
+    	}
+        try
+        {
+            for(int i=0;i<positions.length;i++)
+            {
+                //position 1 is index 0 so we have to change
+                int position = Integer.parseInt(positions[i]) - 1;
+                playerHand.set(position, thisDeck.deal(1).get(0));
+            }
+            System.out.println(playerHand.toString());
+        }
+        catch(Exception e){
+    		System.out.println("Please input integers 1-5 only. Try again");
+    		changeCards();
+    	}
+        
+        
+    }
+    
+    private void exitGame()
+    {
+    	System.out.println("Bye!");
+	System.exit(0);
+    }
+    private void userPlayoutTable()
+    {
+        System.out.println("\nWant to see payout table (y or n)");
+    	String input = scanner.nextLine();
+        
+
+    	if(input.equals("n"))
+        {
+    		showPayoutTable = false;
+                System.out.println("-----------------------------------");
+    	}
+        else if(input.equals("y"))
+            showPayoutTable = true;
+        
+        else if(input.isEmpty()){
+    		userPlayoutTable();
+    	}
+    }
+    private void newGame()
+    {
+        System.out.println("Play again? (y or n)");
+        scanner = new Scanner(System.in);
+        String input = scanner.nextLine();
+        if(input.equals("y"))
+        {
+            userPlayoutTable();
+            play();
+                    
+        }
+        else if(input.equals("n"))
+        {
+            exitGame();
+        }
+        else
+        {
+            newGame();
+    	}
+    }
     
     public void play() 
     {
@@ -420,6 +548,25 @@ public class VideoPoker {
      */
 
 	// implement this method
+        if(showPayoutTable){
+    		showPayoutTable();
+    	}
+        showBalance();
+        getBet();
+        updateBalance();
+        thisDeck.reset();
+        thisDeck.shuffle();
+        dealCards();
+        changeCards();
+        checkHands();
+        showBalance();
+        if(playerBalance == 0){
+    		exitGame();
+    	}
+    	else{
+    		newGame();
+                play();
+    	}
     }
 
 
