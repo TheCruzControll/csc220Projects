@@ -101,35 +101,35 @@ public class VideoPoker {
     		System.out.println("Royal Flush!");
     		playerBalance += winningMultipliers[8] * playerBet;
     	}
-    	if(isStraightFlush()==true){
+    	else if(isStraightFlush()){
     		System.out.println("Straight Flush!");
     		playerBalance += winningMultipliers[7] * playerBet;	
     	}
-        else if(isStraight()==true){
+        else if(isStraight()){
     		System.out.println("Straight!");
     		playerBalance += winningMultipliers[3] * playerBet;	
     	}
-        else if(isFlush()==true){
+        else if(isFlush()){
     		System.out.println("Flush!");
     		playerBalance += winningMultipliers[4] * playerBet;	
     	}
-        else if(isFourOfAKind()==true){
-    		System.out.println("Four of a kind!");
-    		playerBalance += winningMultipliers[6] * playerBet;	
-    	}
-        else if(isThreeOfAKind()==true){
-    		System.out.println("Three of a kind!");
-    		playerBalance += winningMultipliers[2] * playerBet;	
-    	}
-        else if(isFullHouse()==true){
+        else if(isFullHouse()){
     		System.out.println("Full House!");
     		playerBalance += winningMultipliers[5] * playerBet;	
     	}
-        else if(isTwoPair()==true){
+        else if(isFourOfAKind()){
+    		System.out.println("Four of a kind!");
+    		playerBalance += winningMultipliers[6] * playerBet;	
+    	}
+        else if(isThreeOfAKind()){
+    		System.out.println("Three of a kind!");
+    		playerBalance += winningMultipliers[2] * playerBet;	
+    	}
+        else if(isTwoPair()){
     		System.out.println("Two Pair!");
     		playerBalance += winningMultipliers[1] * playerBet;	
     	}
-        else if(isRoyalPair()==true){
+        else if(isRoyalPair()){
     		System.out.println("Royal Pair!");
     		playerBalance += winningMultipliers[0] * playerBet;	
     	}
@@ -143,23 +143,23 @@ public class VideoPoker {
      *   add additional private methods here ....
      *
      *************************************************/
-    /*private boolean isRoyalFlush()//five consecutive denomination cards of the same suit, starting from 10 and ending with an ace
+    private boolean isRoyalFlush()//five consecutive denomination cards of the same suit, starting from 10 and ending with an ace
     {
-        boolean royalFlush = false;
+        boolean royalFlush = true;
         int firstCardSuit = playerHand.get(0).getSuit();
     	List<Integer> royalFlushRankList = Arrays.asList(1,10,11,12,13);
         
         for(Card card : playerHand)
         {
-            if(card.getSuit() == firstCardSuit && royalFlushRankList.contains(card.getRank()))
-    		royalFlush = true;
+            if((card.getSuit() != firstCardSuit || !royalFlushRankList.contains(card.getRank())))
+    		royalFlush = false;
         }
         return royalFlush;
-    }*/
+    }
 
     private boolean isStraightFlush()//five consecutive denomination cards of the same suit
     {
-        boolean straightFlush = false;
+        boolean straightFlush = true;
         int firstCardSuit = playerHand.get(0).getSuit();
         List<Integer> sortedCardRanks = new ArrayList<>();
         
@@ -170,13 +170,16 @@ public class VideoPoker {
         
         Collections.sort(sortedCardRanks);
         
-        for(Card card : playerHand)
-        {
-            if(card.getSuit()==firstCardSuit && sortedCardRanks.get(i) == sortedCardRanks.get(i+1)-1)
-                straightFlush = true;
-            else
-                straightFlush = false;
-        }
+        for(Card card : playerHand){
+    		if(card.getSuit() != firstCardSuit)
+    			return false;
+    	}
+
+        for(int i = 0; i < 4; i++){
+    		if(!(sortedCardRanks.get(i) == (sortedCardRanks.get(i+1) - 1)))
+    			return false;
+    	}
+
         return straightFlush;
     }
     
@@ -193,7 +196,7 @@ public class VideoPoker {
         int counter = 0;
         int commonValue = sortedCardRanks.get(2);
         
-        for(int i = 0;i<sortedCardRanks.size();i++)
+        for(int i = 0;i<4;i++)
         {
             if(sortedCardRanks.get(i) == commonValue)
             {
@@ -209,34 +212,46 @@ public class VideoPoker {
     private boolean isFullHouse()
     {
         boolean fullHouse = false;
-        if(isThreeOfAKind() && isTwoPair())
-        {
-            fullHouse = true;
-        }
-        return fullHouse;
-    }
-    
-    private boolean isFlush()//five non-consecutive denomination cards of the same suit
-    {
-        boolean flush = false;
-        int firstCardSuit = playerHand.get(0).getSuit();
         List<Integer> sortedCardRanks = new ArrayList<>();
         for(Card card : playerHand)
         {
             sortedCardRanks.add(card.getRank());
         }
-        
         Collections.sort(sortedCardRanks);
-        
-        for(int i=0; i<playerHand.size();i++)
+        int commonValue = sortedCardRanks.get(1);
+        int commonValue2 = sortedCardRanks.get(3);
+        int counter = 0;
+        int counter2 = 0;
+        for(int i = 0;i<5;i++)
         {
-            Card card = playerHand.get(i);
-            if(card.getSuit()==firstCardSuit && sortedCardRanks.get(i) != sortedCardRanks.get(i+1)-1)
-                flush = true;
-            else
-                flush = false;
+            if(sortedCardRanks.get(i) == commonValue)
+            {
+                counter++;
+            }
+            else if(sortedCardRanks.get(i) == commonValue2)
+            {
+                counter2++;
+            }
         }
-        return flush;
+        if((counter == 3 && counter2==2) || (counter == 2 && counter2==3))
+        {
+            return true;
+        }
+        
+        return fullHouse;
+    }
+    
+    private boolean isFlush()//five non-consecutive denomination cards of the same suit
+    {
+        int firstCardSuit = playerHand.get(0).getSuit();
+
+    	//Check to see that all card suits are identical
+    	for(Card card : playerHand){
+    		if(card.getSuit() != firstCardSuit)
+    			return false;
+    	}
+
+    	return true;
     }
     
     private boolean isStraight()//five consecutive denomination cards of different suit.
@@ -251,20 +266,25 @@ public class VideoPoker {
         
         Collections.sort(sortedCardRanks);
         
-        for(int i=0; i<playerHand.size();i++)
-        {
-            Card card = playerHand.get(i);
-            if(card.getSuit()!=firstCardSuit && sortedCardRanks.get(i) == sortedCardRanks.get(i+1)-1)
-                straight = true;
-            else
-                straight = false;
-        }
+        for(Card card : playerHand){
+    		if(card.getSuit() != firstCardSuit)
+                {
+    			straight = true;
+                        break;
+                }
+    	}
+        
+        for(int i = 0; i < 4; i++){
+    		if(!(sortedCardRanks.get(i) == (sortedCardRanks.get(i+1) - 1)))
+    			return false;
+    	}
+        
         return straight;
     }
     
     private boolean isThreeOfAKind() //three cards of the same number
     {
-        boolean threeOfAKind = false;
+        boolean threeOfAKind = true;
         List<Integer> sortedCardRanks = new ArrayList<>();
         for(Card card : playerHand)
         {
@@ -275,7 +295,7 @@ public class VideoPoker {
         int counter = 0;
         int commonValue = sortedCardRanks.get(2);
         
-        for(int i = 0;i<sortedCardRanks.size();i++)
+        for(int i = 0;i<4;i++)
         {
             if(sortedCardRanks.get(i) == commonValue)
             {
@@ -283,9 +303,9 @@ public class VideoPoker {
             }
         }
         
-        if(counter==3)
-            threeOfAKind = true;
-        return threeOfAKind;
+        if(!(counter==3))
+            return false;
+        return true;
     }
     
     private boolean isTwoPair()
@@ -301,7 +321,7 @@ public class VideoPoker {
         Collections.sort(sortedCardRanks);
         int counter = 0;
         
-        for(int i = 0;i<sortedCardRanks.size();i++)
+        for(int i = 0;i<4;i++)
         {
             if(sortedCardRanks.get(i) == sortedCardRanks.get(i+1))
             {
@@ -328,10 +348,38 @@ public class VideoPoker {
         Collections.sort(sortedCardRanks);
         int counter = 0;
         
-        for(int i = 0;i<sortedCardRanks.size();i++)
+        for(int i = 0;i<4;i++)
         {
             //If card(i) is the same as card(i+1) and is a royal card or ace
             if(sortedCardRanks.get(i) == sortedCardRanks.get(i+1) && royalRankList.contains(sortedCardRanks.get(i)))
+            {
+                counter++;
+            }
+        }
+        
+        if (counter != 0 && counter != 2)
+        {
+            royalPair = true;
+        }
+        
+        return royalPair;
+    }
+    private boolean isPair()
+    {
+        boolean royalPair = false;
+        List<Integer> sortedCardRanks = new ArrayList<>();
+        for(Card card : playerHand)
+        {
+            sortedCardRanks.add(card.getRank());
+        }
+        
+        Collections.sort(sortedCardRanks);
+        int counter = 0;
+        
+        for(int i = 0;i<sortedCardRanks.size();i++)
+        {
+            //If card(i) is the same as card(i+1) and is a royal card or ace
+            if(sortedCardRanks.get(i) == sortedCardRanks.get(i+1))
             {
                 counter++;
             }
