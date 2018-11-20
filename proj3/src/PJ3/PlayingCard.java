@@ -29,8 +29,8 @@ class PlayingCardException extends Exception {
  *  Suit - valid values are 1 to 4
  *  Do not modify this class!
  */
-class Card {
-	
+class Card{
+    
     /* constant suits and ranks */
     static final String[] Suit = {"","Clubs", "Diamonds", "Hearts", "Spades" };
     static final String[] Rank = {"","A","2","3","4","5","6","7","8","9","10","J","Q","K"};
