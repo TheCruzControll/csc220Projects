@@ -83,8 +83,9 @@ public class PhysiciansHelper
             {
             	System.out.println("I/O error" + e.getMessage());
             }
+            System.out.println("============================================");
+            System.out.println("symptomChecker map:");
             symptomChecker.forEach((key, value) -> System.out.println(key + ":" + value));
-
 	} // end processDatafile
 
 
@@ -117,8 +118,10 @@ public class PhysiciansHelper
 		// Step 5: display result
 		//         for count i = 1 to maximum counter number
 		//             display illness that has count i
-		 
-
+            
+            System.out.println("============================================"+"\n");
+            System.out.println("Possible Symptoms are:");
+            symptomChecker.forEach((key, value) -> System.out.println(key));
 		// implement here.....
 
 	} // end processSymptoms 
