@@ -17,7 +17,7 @@ public class NewClass {
     
     public static void main(String[] args) throws FileNotFoundException{
         
-        Map<String, List<String>> symptomChecker = new HashMap<String,List<String>>();
+        Map<String, List<String>> symptomChecker = new TreeMap<String,List<String>>();
         Scanner sc = new Scanner(System.in);
         String fileName = "sample_data.txt";
         File file = new File(fileName);
@@ -31,38 +31,24 @@ public class NewClass {
         {
             String s = data.nextLine();
             String[] line = s.split(":");
-            String disease = line[0];
+            String disease = line[0].trim();
             String symptomsPart = line[1].toLowerCase();
             String[] symptoms = symptomsPart.trim().split("\\s*,\\s*");
             System.out.println(disease);
             
             for(String symptom : symptoms)
             {
-                
-                if(symptomChecker.containsKey(symptom) == false)
+                if(symptomChecker.get(symptom) == null)
                 {
                    List<String> diseases = new ArrayList<>();
-                       diseases.add(disease);
-                       symptomChecker.put(symptom,diseases);
-
-                    System.out.println("Added new Symptom: "+ symptom);
+                   diseases.add(disease);
+                   symptomChecker.put(symptom,diseases);
                 }
                 else
                 {
-                   if(symptomChecker.get(symptom) == null)
-                   {
-                       List<String> diseases = new ArrayList<>();
-                       diseases.add(disease);
-                       symptomChecker.put(symptom,diseases);
-                       System.out.println("Added new disease: " + disease);
-                   }
-                   else
-                   {
-                       List<String> tempSymptoms = symptomChecker.get(symptom);
-                       tempSymptoms.add(disease);
-                       symptomChecker.put(symptom,tempSymptoms);
-                       System.out.println("Added new disease: " + disease);
-                   }
+                    List<String> tempSymptoms = symptomChecker.get(symptom);
+                    tempSymptoms.add(disease);
+                    symptomChecker.put(symptom,tempSymptoms);
                 }
             }
         }

@@ -18,26 +18,31 @@ public class PhysiciansHelper
 
         public void readFile(Scanner data)
 	{
-		data.useDelimiter(":"); // skip non letter/digit/underscore chars
-		while(data.hasNextLine())
+            data.useDelimiter(":"); // skip non letter/digit/underscore chars
+            while(data.hasNextLine())
+            {
+                String s = data.nextLine();
+                String[] line = s.split(":");
+                String disease = line[0].trim();
+                String symptomsPart = line[1].toLowerCase();
+                String[] symptoms = symptomsPart.trim().split("\\s*,\\s*");
+                for(String symptom : symptoms)
                 {
-                    String s = data.nextLine();
-                    String[] line = s.split(":");
-                    String disease = line[0];
-                    String symptomsPart = line[1].toLowerCase();
-                    String[] symptoms = symptomsPart.trim().split("\\s*,\\s*");
-                    for(String symptom : symptoms)
+                    if(symptomChecker.get(symptom) == null)
                     {
-                        if(symptomChecker.containsKey(symptom))
-                        {
-                            symptomChecker.put(symptom,disease);
-                        }
-                        else
-                        {
-                            symptomChecker.putIfAbsent(symptom,)
-                        }
+                        List<String> diseases = new ArrayList<>();
+                        diseases.add(disease);
+                        symptomChecker.put(symptom,diseases);
+                    }
+                    else
+                    {
+                        List<String> tempSymptoms = symptomChecker.get(symptom);
+                        tempSymptoms.add(disease);
+                        symptomChecker.put(symptom,tempSymptoms);
                     }
                 }
+            }
+            data.close();
         }
 	/* Reads a text file of illnesses and their symptoms.
 	   Each line in the file has the form
@@ -78,7 +83,7 @@ public class PhysiciansHelper
             {
             	System.out.println("I/O error" + e.getMessage());
             }
-            
+            symptomChecker.forEach((key, value) -> System.out.println(key + ":" + value));
 
 	} // end processDatafile
 
