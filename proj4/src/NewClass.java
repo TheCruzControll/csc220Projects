@@ -34,26 +34,35 @@ public class NewClass {
             String disease = line[0];
             String symptomsPart = line[1].toLowerCase();
             String[] symptoms = symptomsPart.trim().split("\\s*,\\s*");
+            System.out.println(disease);
+            
             for(String symptom : symptoms)
             {
-                if(symptomChecker.containsKey(symptom))
+                
+                if(symptomChecker.containsKey(symptom) == false)
+                {
+                   List<String> diseases = new ArrayList<>();
+                       diseases.add(disease);
+                       symptomChecker.put(symptom,diseases);
+
+                    System.out.println("Added new Symptom: "+ symptom);
+                }
+                else
                 {
                    if(symptomChecker.get(symptom) == null)
                    {
                        List<String> diseases = new ArrayList<>();
                        diseases.add(disease);
                        symptomChecker.put(symptom,diseases);
+                       System.out.println("Added new disease: " + disease);
                    }
                    else
                    {
-                       symptomChecker.get(symptom).add(disease);
-                       
+                       List<String> tempSymptoms = symptomChecker.get(symptom);
+                       tempSymptoms.add(disease);
+                       symptomChecker.put(symptom,tempSymptoms);
+                       System.out.println("Added new disease: " + disease);
                    }
-                   
-                }
-                else
-                {
-                    symptomChecker.put(symptom, null);
                 }
             }
         }
