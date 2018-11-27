@@ -3,9 +3,11 @@ import java.io.*;
 
 public class PhysiciansHelper
 {
+        // Scanner for user input
+        private Scanner scanner;
+        
 	// symptom to illnesses map 
 	private Map<String, List<String>> symptomChecker;
-
 
 	/* Constructor symptomChecker map using TreeMap */
 	public PhysiciansHelper()
@@ -14,7 +16,29 @@ public class PhysiciansHelper
 		symptomChecker = new TreeMap<String,List<String>>();
 	} // end default constructor
 
-
+        public void readFile(Scanner data)
+	{
+		data.useDelimiter(":"); // skip non letter/digit/underscore chars
+		while(data.hasNextLine())
+                {
+                    String s = data.nextLine();
+                    String[] line = s.split(":");
+                    String disease = line[0];
+                    String symptomsPart = line[1].toLowerCase();
+                    String[] symptoms = symptomsPart.trim().split("\\s*,\\s*");
+                    for(String symptom : symptoms)
+                    {
+                        if(symptomChecker.containsKey(symptom))
+                        {
+                            symptomChecker.put(symptom,disease);
+                        }
+                        else
+                        {
+                            symptomChecker.putIfAbsent(symptom,)
+                        }
+                    }
+                }
+        }
 	/* Reads a text file of illnesses and their symptoms.
 	   Each line in the file has the form
 		Illness: Symptom, Symptom, Symptom, ...  
@@ -38,6 +62,23 @@ public class PhysiciansHelper
 		// Step 3: display symptomChecker map
 
 		// implement here.....
+            Scanner sc = new Scanner(System.in);
+            String fileName = sc.nextLine();
+            File file = new File(fileName);
+            try
+            {
+                Scanner data = new Scanner(file);
+                readFile(data);
+            }
+            catch(FileNotFoundException e)
+            {
+		System.out.println("File not found: " +e.getMessage());
+            }
+            catch(IOException e)
+            {
+            	System.out.println("I/O error" + e.getMessage());
+            }
+            
 
 	} // end processDatafile
 
