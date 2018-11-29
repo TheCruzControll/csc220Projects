@@ -16,9 +16,9 @@ public class PhysiciansHelper
 		symptomChecker = new TreeMap<String,List<String>>();
 	} // end default constructor
         
-        private List<String> patientSymptoms;
+        private List<String> patientSymptoms = new ArrayList<>();
         
-        private Map<String,Integer> illnessToFrequency;
+        private Map<String,Integer> illnessToFrequency = new TreeMap<>();
         
         private int maxCounter = 0;
         
@@ -132,7 +132,7 @@ public class PhysiciansHelper
             System.out.println("============================================"+"\n");
             System.out.println("Possible Symptoms are:");
             symptomChecker.forEach((key, value) -> System.out.println(key));
-            
+            System.out.println("============================================"+"\n");
             
             System.out.print("Enter Symptoms: ");
             Scanner sc = new Scanner(System.in);
@@ -142,7 +142,7 @@ public class PhysiciansHelper
             {
                 if(!symptomChecker.containsKey(symptom))
                 {
-                    System.out.println("=>invalid symptom:"+symptom);
+                    System.out.println("\t=>invalid symptom:"+symptom);
                 }
                 else if(!patientSymptoms.contains(symptom))
                 {
@@ -150,9 +150,11 @@ public class PhysiciansHelper
                 }
                 else if(patientSymptoms.contains(symptom))
                 {
-                    System.out.println("=>duplicate symptom:"+symptom);
+                    System.out.println("\t=>duplicate symptom:"+symptom);
                 }
             }
+            
+            System.out.println("\n"+"============================================\n");
             
             //prints patient symptoms
             System.out.print("PatientSymptom List: " + " [");
@@ -160,21 +162,21 @@ public class PhysiciansHelper
             {
                 System.out.print(symptom + ",");
             }
-            System.out.print("]");
+            System.out.println("]\n");
             
             for(String symptom : patientSymptoms)
             {
                 List<String> symptomList = symptomChecker.get(symptom);
                 for(String illness : symptomList)
                 {
-                    if(illnessToFrequency.containsKey(illness) == false)
+                    frequency = illnessToFrequency.get(illness);
+                    if(illnessToFrequency.get(illness)== null)
                     {
                         frequency = 1;
                         illnessToFrequency.put(illness,frequency);
                     }
-                    else if(illnessToFrequency.containsKey(illness))
+                    else
                     {
-                        frequency = illnessToFrequency.get(illness);
                         frequency++;
                         illnessToFrequency.put(illness,frequency);
                     }
@@ -182,6 +184,8 @@ public class PhysiciansHelper
                         maxCounter = frequency;
                 }
             }
+            
+            System.out.println("Possible illnesses that match any symptom are: \n");
             for(int i = 1;i<maxCounter+1;i++)
             {
                 System.out.println("==> Disease(s) match " + i + " symptom(s)");
@@ -190,6 +194,7 @@ public class PhysiciansHelper
                     if(illnessToFrequency.get(key) == i)
                         System.out.println(key);
                 }
+                System.out.println("\n");
             }
 	} // end processSymptoms 
 
