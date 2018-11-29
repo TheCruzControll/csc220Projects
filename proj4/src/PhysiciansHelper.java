@@ -137,7 +137,7 @@ public class PhysiciansHelper
             System.out.print("Enter Symptoms: ");
             Scanner sc = new Scanner(System.in);
             String s = sc.nextLine();
-            String[] symptomArr = s.toLowerCase().trim().split(",");
+            String[] symptomArr = s.toLowerCase().trim().split("\\s*,\\s*");
             for(String symptom : symptomArr)
             {
                 if(!symptomChecker.containsKey(symptom))

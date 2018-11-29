@@ -464,7 +464,8 @@ public class VideoPoker {
                 getBet();
             }
     	}
-    	catch(InputMismatchException e){
+    	catch(InputMismatchException e)
+        {
             System.out.println("Invalid entry. Try again");
             //If its invalid loop it again
             getBet();
@@ -475,6 +476,7 @@ public class VideoPoker {
     {
         playerBalance -= playerBet;
     }
+    
     private void dealCards()
     {
         try
@@ -498,7 +500,8 @@ public class VideoPoker {
         String[] positions = positionsInput.split(" ");
         
         //If they didnt enter anything then just exit out
-        if(positionsInput.isEmpty()){
+        if(positionsInput.isEmpty())
+        {
     		return;
     	}
         
@@ -514,7 +517,8 @@ public class VideoPoker {
             }
             System.out.println(playerHand.toString());
         }
-        catch(Exception e){
+        catch(Exception e)
+        {
             System.out.println("Please input integers 1-5 only. Try again");
             //If invalid loop again
             changeCards();
@@ -541,7 +545,8 @@ public class VideoPoker {
         else if(input.equals("y"))
             showPayoutTable = true;
         
-        else if(input.isEmpty()){
+        else if(input.isEmpty())
+        {
             //If invalid loop again
             userPlayoutTable();
     	}
