@@ -15,7 +15,15 @@ public class PhysiciansHelper
 		// use TreeMap, i.e. sorted order keys
 		symptomChecker = new TreeMap<String,List<String>>();
 	} // end default constructor
-
+        
+        private List<String> patientSymptoms;
+        
+        private Map<String,Integer> illnessToFrequency;
+        
+        private int maxCounter = 0;
+        
+        private Integer frequency = null;
+        
         public void readFile(Scanner data)
 	{
             data.useDelimiter(":"); // skip non letter/digit/underscore chars
@@ -67,6 +75,7 @@ public class PhysiciansHelper
 		// Step 3: display symptomChecker map
 
 		// implement here.....
+            System.out.print("Enter data file name: ");
             Scanner sc = new Scanner(System.in);
             String fileName = sc.nextLine();
             File file = new File(fileName);
@@ -119,11 +128,69 @@ public class PhysiciansHelper
 		//         for count i = 1 to maximum counter number
 		//             display illness that has count i
             
+            //Prints Symptoms
             System.out.println("============================================"+"\n");
             System.out.println("Possible Symptoms are:");
             symptomChecker.forEach((key, value) -> System.out.println(key));
-		// implement here.....
-
+            
+            
+            System.out.print("Enter Symptoms: ");
+            Scanner sc = new Scanner(System.in);
+            String s = sc.nextLine();
+            String[] symptomArr = s.toLowerCase().trim().split(",");
+            for(String symptom : symptomArr)
+            {
+                if(!symptomChecker.containsKey(symptom))
+                {
+                    System.out.println("=>invalid symptom:"+symptom);
+                }
+                else if(!patientSymptoms.contains(symptom))
+                {
+                    patientSymptoms.add(symptom);
+                }
+                else if(patientSymptoms.contains(symptom))
+                {
+                    System.out.println("=>duplicate symptom:"+symptom);
+                }
+            }
+            
+            //prints patient symptoms
+            System.out.print("PatientSymptom List: " + " [");
+            for(String symptom : patientSymptoms)
+            {
+                System.out.print(symptom + ",");
+            }
+            System.out.print("]");
+            
+            for(String symptom : patientSymptoms)
+            {
+                List<String> symptomList = symptomChecker.get(symptom);
+                for(String illness : symptomList)
+                {
+                    if(illnessToFrequency.containsKey(illness) == false)
+                    {
+                        frequency = 1;
+                        illnessToFrequency.put(illness,frequency);
+                    }
+                    else if(illnessToFrequency.containsKey(illness))
+                    {
+                        frequency = illnessToFrequency.get(illness);
+                        frequency++;
+                        illnessToFrequency.put(illness,frequency);
+                    }
+                    if(frequency>maxCounter)
+                        maxCounter = frequency;
+                }
+            }
+            for(int i = 1;i<maxCounter+1;i++)
+            {
+                System.out.println("==> Disease(s) match " + i + " symptom(s)");
+                for(String key : illnessToFrequency.keySet())
+                {
+                    if(illnessToFrequency.get(key) == i)
+                        System.out.println(key);
+                }
+            }
 	} // end processSymptoms 
 
 
