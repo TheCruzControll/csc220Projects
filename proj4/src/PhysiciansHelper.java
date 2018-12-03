@@ -83,18 +83,24 @@ public class PhysiciansHelper
             {
                 Scanner data = new Scanner(file);
                 readFile(data);
+                System.out.println("============================================");
+                System.out.println("symptomChecker map:");
+                symptomChecker.forEach((key, value) -> System.out.println(key + ":" + value));
             }
             catch(FileNotFoundException e)
             {
+                
 		System.out.println("File not found: " +e.getMessage());
+                sc.close();
+                
             }
             catch(IOException e)
             {
+                
             	System.out.println("I/O error" + e.getMessage());
+                sc.close();
             }
-            System.out.println("============================================");
-            System.out.println("symptomChecker map:");
-            symptomChecker.forEach((key, value) -> System.out.println(key + ":" + value));
+            
 	} // end processDatafile
 
 
@@ -129,6 +135,7 @@ public class PhysiciansHelper
 		//             display illness that has count i
             
             //Prints Symptoms
+            
             System.out.println("============================================"+"\n");
             System.out.println("Possible Symptoms are:");
             symptomChecker.forEach((key, value) -> System.out.println(key));
@@ -157,13 +164,14 @@ public class PhysiciansHelper
             System.out.println("\n"+"============================================\n");
             
             //prints patient symptoms
-            System.out.print("PatientSymptom List: " + " [");
+            System.out.println("PatientSymptom List: " + patientSymptoms);
+            /*
             for(String symptom : patientSymptoms)
             {
                 System.out.print(symptom + ",");
             }
             System.out.println("]\n");
-            
+            */
             for(String symptom : patientSymptoms)
             {
                 List<String> symptomList = symptomChecker.get(symptom);
