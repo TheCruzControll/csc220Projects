@@ -26,7 +26,7 @@ public class PhysiciansHelper
         
         public void readFile(Scanner data)
 	{
-            data.useDelimiter(":"); // skip non letter/digit/underscore chars
+            //data.useDelimiter(":"); 
             while(data.hasNextLine())
             {
                 String s = data.nextLine();
